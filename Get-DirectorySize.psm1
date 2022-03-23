@@ -15,6 +15,7 @@ function Get-DirectorySize {
         [string]$DataType,
 
         [Parameter(Mandatory=$false,HelpMessage="Input how many threads to use for the robocopy process.")]
+        [ValidatePattern("^\d{1,2}$")]
         [alias("mt")]
         [int]$MultiThread = 8
     )
