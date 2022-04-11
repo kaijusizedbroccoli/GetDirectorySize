@@ -17,7 +17,11 @@ function Get-DirectorySize {
         [Parameter(Mandatory=$false,HelpMessage="Input how many threads to use for the robocopy process.")]
         [ValidatePattern("^\d{1,2}$")]
         [alias("mt")]
-        [int]$MultiThread = 8
+        [int]$MultiThread = 8,
+
+        [Parameter(Mandatory=$false,HelpMessage="Use for raw byte output.")]
+        [alias("b")]
+        [switch]$RawBytes
     )
     
     # ------- REGION START: Robocopy Cmd ------- #
@@ -53,7 +57,7 @@ function Get-DirectorySize {
 
     $OutputObject = [PSCustomObject]@{
         Path = $Path
-        Size = $SizeOutput
+        Size = if($RawBytes){ $SizeInBytes } else { $SizeOutput }
         "FileCount" = $FileCount
         "DirectoryCount" = $DirCount
     }
