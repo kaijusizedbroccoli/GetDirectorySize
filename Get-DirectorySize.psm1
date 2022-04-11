@@ -8,11 +8,11 @@ function Get-DirectorySize {
         [alias("p")]
         [string]$Path,
 
-        [Parameter(Mandatory=$true,HelpMessage="Original = How windows displays a file size, Gb = In Gb, 512Mb would be 0.5Gb, Mb = In Mb, 1Gb would be 1024Mb")]
+        [Parameter(Mandatory=$false,HelpMessage="Original = How windows displays a file size, Gb = In Gb, 512Mb would be 0.5Gb, Mb = In Mb, 1Gb would be 1024Mb")]
         [ValidateNotNullOrEmpty()]
         [ValidateSet("Original","Gb","Mb")]
         [alias("dt")]
-        [string]$DataType,
+        [string]$DataType = "Original",
 
         [Parameter(Mandatory=$false,HelpMessage="Input how many threads to use for the robocopy process.")]
         [ValidatePattern("^\d{1,2}$")]
@@ -28,9 +28,9 @@ function Get-DirectorySize {
 
     $RobocopyProcess = robocopy $Path "NO" /e /l /r:0 /w:0 /mt:$MultiThread /nfl /ndl /nc /fp /np /njh /xj /bytes
 
-    [int64]$SizeInBytes = $RobocopyProcess.Where({$_ -match "Bytes :"}).Split("",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
-    [int64]$FileCount   = $RobocopyProcess.Where({$_ -match "Files :"}).Split("",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
-    [int64]$DirCount    = $RobocopyProcess.Where({$_ -match "Dirs :"}).Split("",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
+    [int64]$SizeInBytes = $RobocopyProcess.Where({$_ -match "Bytes :"}).Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
+    [int64]$FileCount   = $RobocopyProcess.Where({$_ -match "Files :"}).Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
+    [int64]$DirCount    = $RobocopyProcess.Where({$_ -match "Dirs :"}).Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries)[2]
 
     # ------- REGION END  : Robocopy Cmd ------- #
 
